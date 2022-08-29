@@ -1,0 +1,335 @@
+<style>
+	#todo_list {
+		padding-bottom: 1px;
+	}
+	#todo_menu {
+		display: flex;
+	}
+	.todo_menu_button {
+		display: inline-flex;
+		align-items: center;
+		height: 50px;
+		line-height: 50px;
+		vertical-align: bottom;
+		margin: 6px 5px 0 5px;
+		padding: 0 15px 0 10px;
+		background: #fff;
+		box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+		border-radius: 4px;
+		user-select: none;
+		cursor: pointer;
+		transition: background 150ms;
+	}
+	.todo_menu_button:first-child {
+		margin-left: 10px;
+	}
+	.todo_menu_button svg {
+		fill: #aaa;
+		transition: fill 150ms;
+	}
+	.todo_menu_button:hover {
+		background: #f7f7f7;
+	}
+	.todo_menu_button:hover > svg {
+		fill: #1a73eb;
+	}
+	label#search_todo_icon {
+		position: relative;
+		display: flex;
+		flex: 1;
+	}
+	label#search_todo_icon > svg {
+		fill: #aaa;
+		position: absolute;
+		top: 16px;
+		left: 10px;
+	}
+	#search_todo {;
+		flex: 1;
+		height: 50px;
+		padding: 2px 8px;
+		margin: 6px 5px 0 5px;
+		box-sizing: border-box;
+		font-size: 18px;
+		font-family: Noto Sans, Helvetica;
+		vertical-align: top;
+		border: none;
+		border-radius: 4px;
+		box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+		margin-right: 10px;
+		cursor: pointer;
+		transition: all 150ms;
+	}
+	#search_todo:hover {
+		background: #f7f7f7;
+	}
+	#search_todo + svg {
+		transition: fill 150ms;
+		pointer-events: none;
+	}
+	#search_todo:hover + svg {
+		fill: #1a73eb;
+	}
+	#search_todo:focus {
+		outline: none;
+		cursor: text;
+	}
+	#search_todo:focus:hover {
+		background: #fff;
+	}
+	#search_todo:focus + svg {
+		display: none;
+	}
+	#search_todo::placeholder {
+		color: #000;
+	}
+	#search_todo:focus::placeholder {
+		color: transparent;
+	}
+	div.todo_item {
+		display: flex;
+		align-items: center;
+		height: 50px;
+		line-height: 50px;
+		text-indent: 5px;
+		margin: 6px 10px;
+		padding: 0 10px;
+		background: #fff;
+		box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+		border-radius: 4px;
+	}
+	input[type=checkbox].todo_item_checkbox {
+		width: 20px;
+		height: 20px;
+		position: relative;
+		vertical-align: middle;
+		margin: 5px;
+	}
+	input[type=checkbox].todo_item_checkbox:after {
+		content: '';
+		width: 20px;
+		height: 20px;
+		display: inline-block;
+		position: absolute;
+		z-index: 1050;
+		border-radius: 2px;
+		background: #fff;
+		box-shadow: inset 0 0 5px #f7f7f7, 0 0 0 1.5px #ccc;
+	}
+	input[type=checkbox].todo_item_checkbox:hover:after {
+		background: #f0f0f0;
+	}
+	input[type=checkbox].todo_item_checkbox:checked:before {
+		content: '';
+		width: 12.5px;
+		height: 6px;
+		display: inline-block;
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		z-index: 1051;
+		transform: rotate(-45deg);
+		border-bottom: 3px solid #fff;
+		border-left: 3px solid #fff;
+	}
+	input[type=checkbox].todo_item_checkbox:checked:after {
+		background: #1a73eb;
+		box-shadow: 0 0 0 1.5px #1a73eb;
+	}
+	span.todo_item_tag {
+		font-size: 0.8em;
+		background: #bdf;
+		height: 20px;
+		line-height: 20px;
+		margin: 0 3px;
+		padding: 0 5px 0 0;
+	}
+	span.todo_item_tag:first-of-type {
+		margin-left: 10px;
+	}
+	span.todo_item_tag.lightblue {
+		background: #bdf;
+	}
+	span.todo_item_tag.lightgreen {
+		background: #bfb;
+	}
+	span.todo_item_tag.lightred {
+		background: #fbb;
+	}
+	span.todo_item_tag.lightorange {
+		background: #fdb;
+	}
+	span.todo_item_tag.lightyellow {
+		background: #ffb;
+	}
+	span.todo_item_tag.lightpurple {
+		background: #dbd;
+	}
+	span.todo_item_tag.lightgrey {
+		background: #ddd;
+	}
+	svg.todo_item_vertical_dots {
+		opacity: 0;
+		padding: 8px;
+		fill: #ddd;
+		margin-left: auto;
+		cursor: pointer;
+		transition: all 150ms;
+	}
+	.todo_item:hover > svg.todo_item_vertical_dots {
+		opacity: 1;
+	}
+	svg.todo_item_vertical_dots:hover {
+		background: #f4f4f4;
+		fill: #888;
+		border-radius: 50%;
+	}
+	svg.todo_item_vertical_dots:active {
+		background: #eaeaea;
+	}
+	svg.todo_item_vertical_dots.show {
+		opacity: 1;
+		background: #f4f4f4;
+		fill: #888;
+		border-radius: 50%;
+	}
+	#todo_context_menu {
+		width: 250px;
+		height: 90px;
+		position: absolute;
+		background: #fff;
+		box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+		display: none;
+	}
+	#todo_context_menu.show {
+		display: initial;
+	}
+	.todo_context_menu_item {
+		height: 45px;
+		line-height: 45px;
+		cursor: pointer;
+		transition: all 150ms;
+	}
+	.todo_context_menu_item > svg {
+		fill: #aaa;
+		vertical-align: -6px;
+		margin-left: 10px;
+		margin-right: 10px;
+		transition: fill 150ms;
+	}
+	.todo_context_menu_item:hover > svg {
+		fill: #1a73eb;
+	}
+	.todo_context_menu_item:hover > svg.red {
+		fill: #eb7373;
+	}
+	.todo_context_menu_item:hover {
+		background: #f7f7f7;
+	}
+	.todo_context_menu_item:active {
+		background: #ececec;
+	}
+	#new_todo_window {
+		width: calc(1920px * 0.4);
+		height: calc(1080px * 0.6);
+		background: #fff;
+		box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+		z-index: 3010;
+		display: none;
+	}
+	input.new_todo_window_textbox {
+		width: calc(100% - 2px);
+		height: 40px;
+		font-size: 16px;
+		font-family: Noto Sans, Helvetica;
+		border: none;
+		border-bottom: 1px solid #ddd;
+		padding: 2px 8px;
+		box-sizing: border-box;
+	}
+	input.new_todo_window_textbox:focus {
+		outline: none;
+	}
+	label.new_todo_window_label {
+		font-size: 16px;
+		font-family: Noto Sans, Helvetica;
+		margin-left: 4px;
+		user-select: none;
+	}
+	input.new_todo_window_button {
+		height: 30px;
+		margin: 2px;
+		font-size: 16px;
+		font-family: Noto Sans, Helvetica;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		background: #fff;
+	}
+	input.new_todo_window_button:hover {
+		background: #f7f7f7;
+	}
+	input.new_todo_window_button:active {
+		background: #f0f0f0;
+	}
+	textarea.new_todo_window_textarea {
+		border: none;
+		padding: 2px 8px;
+		box-sizing: border-box;
+		resize: none;
+		font-size: 16px;
+		font-family: Noto Sans, Helvetica;
+		vertical-align: bottom;
+	}
+	textarea.new_todo_window_textarea:focus {
+		outline: none;
+	}
+	#new_todo_title {
+		margin-top: 1px;
+		margin-left: 1px;
+	}
+	#new_todo_metadata {
+		padding: 4px;
+		box-sizing: border-box;
+		border-bottom: 1px solid #ddd;
+	}
+	div.new_todo_metadata_box {
+		display: inline-block;
+		width: calc(33.33%);
+	}
+	div.new_todo_metadata_box.center_align {
+		text-align: center;
+	}
+	div.new_todo_metadata_box.right_align {
+		text-align: right;
+	}
+	#new_todo_description {
+		width: 100%;
+		height: 72%;
+	}
+	#new_todo_action {
+		width: 100%;
+		text-align: center;
+	}
+	#new_todo_action > input.new_todo_window_button {
+		width: 50%;
+		height: 58px;
+		border-bottom: 1px solid #ddd;
+		margin: 0;
+		border-radius: 0;
+		border: 1px solid #ddd;
+	}
+</style>
+<div id='todo_menu'><div id='add_todo_item' class='todo_menu_button'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>Add new item</div><div id='refresh_todo' class='todo_menu_button'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 -2 20 20"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>Refresh</div><div id='edit_todo' class='todo_menu_button'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-2 -3 22 22"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/></svg>Edit</div><label id='search_todo_icon'><input type='text' id='search_todo' placeholder='      Search'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-3 -4 26 26"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg></label></div>
+<div id='todo_list'>
+	{% for i in range(data['count']) %}<div class='todo_item'>{% if data['items'][i]['completed'] %}<input type='checkbox' class='todo_item_checkbox' checked> {{data['items'][i]['title']}} <svg xmlns="http://www.w3.org/2000/svg" class='todo_item_vertical_dots' width="32" height="32" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></div>{% else %}<input type='checkbox' class='todo_item_checkbox'> {{data['items'][i]['title']}} {% for tag in data['items'][i]['tags'] %}<span class='todo_item_tag {{data["tag_colors"][tag]}}'>{{tag}}</span>{% endfor %} {{due_date(data['items'][i]['metadata']['due'])}} <svg xmlns="http://www.w3.org/2000/svg" class='todo_item_vertical_dots' width="32" height="32" viewBox="0 0 16 16" data-uuid='{{data["items"][i]["uuid"]}}'><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></div>{% endif %}{% endfor %}
+</div>
+<div id='todo_context_menu'><div id='todo_context_menu_see_in_calendar' class='todo_context_menu_item'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path d="M4.684 11.523v-2.3h2.261v-.61H4.684V6.801h2.464v-.61H4v5.332h.684zm3.296 0h.676V8.98c0-.554.227-1.007.953-1.007.125 0 .258.004.329.015v-.613a1.806 1.806 0 0 0-.254-.02c-.582 0-.891.32-1.012.567h-.02v-.504H7.98v4.105zm2.805-5.093c0 .238.192.425.43.425a.428.428 0 1 0 0-.855.426.426 0 0 0-.43.43zm.094 5.093h.672V7.418h-.672v4.105z"/><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>See in Calendar</div><div id='todo_context_menu_delete' class='todo_context_menu_item'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" class='red'><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>Delete</div></div>
+<div id='new_todo_window'>
+	<input type='text' id='new_todo_title' class='new_todo_window_textbox' placeholder='Title'><input type='text' id='new_todo_tags' class='new_todo_window_textbox' placeholder='Tags'><div id='new_todo_metadata'><div class='new_todo_metadata_box'><label class='new_todo_window_label'>Due: </label><input type='button' id='new_todo_due' class='new_todo_window_button' value='Add date/time'><input type='hidden' id='new_todo_due_value' value='false'></div><div class='new_todo_metadata_box center_align'><label class='new_todo_window_label'>Repeat: </label><input type='button' id='new_todo_repeat' class='new_todo_window_button' value='No'><input type='hidden' id='new_todo_repeat_value' value='false,0'></div><div class='new_todo_metadata_box right_align'><label class='new_todo_window_label'>Priority: </label><input type='button' id='new_todo_priority' class='new_todo_window_button' value='Normal'></div></div><textarea id='new_todo_description' class='new_todo_window_textarea' placeholder='Description'></textarea><div id='new_todo_action'><input type='button' id='cancel_new_todo_button' class='new_todo_window_button cancel' value='Cancel'><input type='button' id='add_new_todo_button' class='new_todo_window_button action' value='Add'></div>
+</div>
