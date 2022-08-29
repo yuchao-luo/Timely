@@ -325,11 +325,87 @@
 		border: 1px solid #ddd;
 	}
 </style>
-<div id='todo_menu'><div id='add_todo_item' class='todo_menu_button'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>Add new item</div><div id='refresh_todo' class='todo_menu_button'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 -2 20 20"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>Refresh</div><div id='edit_todo' class='todo_menu_button'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-2 -3 22 22"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/></svg>Edit</div><label id='search_todo_icon'><input type='text' id='search_todo' placeholder='      Search'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-3 -4 26 26"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg></label></div>
-<div id='todo_list'>
-	{% for i in range(data['count']) %}<div class='todo_item'>{% if data['items'][i]['completed'] %}<input type='checkbox' class='todo_item_checkbox' checked> {{data['items'][i]['title']}} <svg xmlns="http://www.w3.org/2000/svg" class='todo_item_vertical_dots' width="32" height="32" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></div>{% else %}<input type='checkbox' class='todo_item_checkbox'> {{data['items'][i]['title']}} {% for tag in data['items'][i]['tags'] %}<span class='todo_item_tag {{data["tag_colors"][tag]}}'>{{tag}}</span>{% endfor %} {{due_date(data['items'][i]['metadata']['due'])}} <svg xmlns="http://www.w3.org/2000/svg" class='todo_item_vertical_dots' width="32" height="32" viewBox="0 0 16 16" data-uuid='{{data["items"][i]["uuid"]}}'><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></div>{% endif %}{% endfor %}
+<div id='todo_menu'>
+	<div id='add_todo_item' class='todo_menu_button'>
+		<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
+			<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+		</svg>
+		Add new item
+	</div>
+	<div id='refresh_todo' class='todo_menu_button'>
+		<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 -2 20 20">
+			<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+			<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+		</svg>
+		Refresh
+	</div>
+	<div id='edit_todo' class='todo_menu_button'>
+		<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-2 -3 22 22">
+			<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+			<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+		</svg>
+		Edit
+	</div>
+	<label id='search_todo_icon'><input type='text' id='search_todo' placeholder='      Search'>
+		<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-3 -4 26 26">
+			<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+		</svg>
+	</label>
 </div>
-<div id='todo_context_menu'><div id='todo_context_menu_see_in_calendar' class='todo_context_menu_item'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path d="M4.684 11.523v-2.3h2.261v-.61H4.684V6.801h2.464v-.61H4v5.332h.684zm3.296 0h.676V8.98c0-.554.227-1.007.953-1.007.125 0 .258.004.329.015v-.613a1.806 1.806 0 0 0-.254-.02c-.582 0-.891.32-1.012.567h-.02v-.504H7.98v4.105zm2.805-5.093c0 .238.192.425.43.425a.428.428 0 1 0 0-.855.426.426 0 0 0-.43.43zm.094 5.093h.672V7.418h-.672v4.105z"/><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>See in Calendar</div><div id='todo_context_menu_delete' class='todo_context_menu_item'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" class='red'><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>Delete</div></div>
+<div id='todo_list'>
+	{% for i in range(data['count']) %}
+		<div class='todo_item'>
+			{% if data['items'][i]['completed'] %}
+				<input type='checkbox' class='todo_item_checkbox' checked>
+				{{data['items'][i]['title']}}
+				<svg xmlns="http://www.w3.org/2000/svg" class='todo_item_vertical_dots' width="32" height="32" viewBox="0 0 16 16">
+					<path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+				</svg>
+			{% else %}
+				<input type='checkbox' class='todo_item_checkbox'>
+				{{data['items'][i]['title']}}
+				{% for tag in data['items'][i]['tags'] %}
+					<span class='todo_item_tag {{data["tag_colors"][tag]}}'>{{tag}}</span>
+				{% endfor %}
+				{{due_date(data['items'][i]['metadata']['due'])}}
+				<svg xmlns="http://www.w3.org/2000/svg" class='todo_item_vertical_dots' width="32" height="32" viewBox="0 0 16 16" data-uuid='{{data["items"][i]["uuid"]}}'>
+					<path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+				</svg>
+			{% endif %}
+		</div>
+	{% endfor %}
+</div>
+<div id='todo_context_menu'>
+	<div id='todo_context_menu_see_in_calendar' class='todo_context_menu_item'>
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
+			<path d="M4.684 11.523v-2.3h2.261v-.61H4.684V6.801h2.464v-.61H4v5.332h.684zm3.296 0h.676V8.98c0-.554.227-1.007.953-1.007.125 0 .258.004.329.015v-.613a1.806 1.806 0 0 0-.254-.02c-.582 0-.891.32-1.012.567h-.02v-.504H7.98v4.105zm2.805-5.093c0 .238.192.425.43.425a.428.428 0 1 0 0-.855.426.426 0 0 0-.43.43zm.094 5.093h.672V7.418h-.672v4.105z"/>
+			<path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+		</svg>See in Calendar
+	</div>
+	<div id='todo_context_menu_delete' class='todo_context_menu_item'>
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" class='red'>
+			<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+			<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+		</svg>Delete
+	</div>
+</div>
 <div id='new_todo_window'>
-	<input type='text' id='new_todo_title' class='new_todo_window_textbox' placeholder='Title'><input type='text' id='new_todo_tags' class='new_todo_window_textbox' placeholder='Tags'><div id='new_todo_metadata'><div class='new_todo_metadata_box'><label class='new_todo_window_label'>Due: </label><input type='button' id='new_todo_due' class='new_todo_window_button' value='Add date/time'><input type='hidden' id='new_todo_due_value' value='false'></div><div class='new_todo_metadata_box center_align'><label class='new_todo_window_label'>Repeat: </label><input type='button' id='new_todo_repeat' class='new_todo_window_button' value='No'><input type='hidden' id='new_todo_repeat_value' value='false,0'></div><div class='new_todo_metadata_box right_align'><label class='new_todo_window_label'>Priority: </label><input type='button' id='new_todo_priority' class='new_todo_window_button' value='Normal'></div></div><textarea id='new_todo_description' class='new_todo_window_textarea' placeholder='Description'></textarea><div id='new_todo_action'><input type='button' id='cancel_new_todo_button' class='new_todo_window_button cancel' value='Cancel'><input type='button' id='add_new_todo_button' class='new_todo_window_button action' value='Add'></div>
+	<input type='text' id='new_todo_title' class='new_todo_window_textbox' placeholder='Title'>
+	<input type='text' id='new_todo_tags' class='new_todo_window_textbox' placeholder='Tags'>
+	<div id='new_todo_metadata'>
+		<div class='new_todo_metadata_box'>
+			<label class='new_todo_window_label'>Due: </label><input type='button' id='new_todo_due' class='new_todo_window_button' value='Add date/time'>
+			<input type='hidden' id='new_todo_due_value' value='false'>
+		</div>
+		<div class='new_todo_metadata_box center_align'><label class='new_todo_window_label'>Repeat: </label><input type='button' id='new_todo_repeat' class='new_todo_window_button' value='No'>
+			<input type='hidden' id='new_todo_repeat_value' value='false,0'>
+		</div>
+		<div class='new_todo_metadata_box right_align'><label class='new_todo_window_label'>Priority: </label><input type='button' id='new_todo_priority' class='new_todo_window_button' value='Normal'>
+		</div>
+	</div>
+	<textarea id='new_todo_description' class='new_todo_window_textarea' placeholder='Description'></textarea>
+	<div id='new_todo_action'>
+		<input type='button' id='cancel_new_todo_button' class='new_todo_window_button cancel' value='Cancel'>
+		<input type='button' id='add_new_todo_button' class='new_todo_window_button action' value='Add'>
+	</div>
 </div>
